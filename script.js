@@ -2,7 +2,6 @@
 var pokename = '';
 var pokeData;
 
-
 function getPokename(element) {
     pokename = element.value;
 }
@@ -51,23 +50,12 @@ async function fetchPokemon() {
             pokemonMovesToDisplay.push(" "+pokeMoves[m].move.name);
         }
         document.querySelector(".moves").innerText = "Moves: " + pokemonMovesToDisplay;
-
-
-
-
-
-
-
-        // cardsDiv.innerHTML = makePokeCard(pokeData) + cardsDiv.innerHTML;
-
     }
-
-    
 }
 
-function validateInput() {
+// function validateInput() {
     
-}
+// }
 
 
 
