@@ -1,69 +1,70 @@
 
 var pokename = '';
 var pokeData;
+var card_area = document.querySelector('.card_area')
+var pokemonAbilitiesToDisplay = [];
+var pokemonMovesToDisplay = [];
 
 function getPokename(element) {
     pokename = element.value;
 }
 
 async function fetchPokemon() {
-    
     // Display alert when no input
     if (pokename ==''){
         alert('Pokemon name can not be empty')
     }else {
-        //fetch all Pokemon names
-        // var allResponse = await fetch("https://pokeapi.co/api/v2/pokemon/");
-        // var allPokemon = await allResponse.json();
-        // console.log(allPokemon.results);
-        // var allNames = allPokemon.results;
-
-        // Display alert when Pokemon not found
-
+        //ToDo: if pokemon name not found 
 
         //fetch the pokemon data
         var response = await fetch("https://pokeapi.co/api/v2/pokemon/" + pokename);
         var pokeData = await response.json();
-        console.log(pokeData.moves);
+        console.log(pokeData);
+        //organize specific data fetched
         var pokeAbilities = pokeData.abilities;
-        //Display basic info on Pokemon
-        document.querySelector(".card-img-top").src = pokeData.sprites.front_shiny;
-        document.querySelector(".card-title").innerText = pokeData.name;
-        document.querySelector(".card-subtitle").innerText = "Weight: " + pokeData.weight + "lbs.";
+        var backImg = pokeData.sprites.back_shiny;
+
+        //console.log(pokename);
+        // console.log(pokeData.types.length);
 
         //Gather abilities 
-        var pokemonAbilitiesToDisplay = [];
-        // console.log(pokeData.types.length);
         for (var i = 0; i < pokeAbilities.length; i++) {
             pokemonAbilitiesToDisplay.push(" "+pokeData.abilities[i].ability.name);
-            // console.log(pokeAbilities[i].ability.name);
-            // console.log(pokemonAbilitiesToDisplay);
+            //console.log(pokeAbilities[i].ability.name);
         }
-        // pokemonAbilitiesToDisplay = pokemonAbilitiesToDisplay.map(x => x+"");
         //console.log(pokemonAbilitiesToDisplay);
-        document.querySelector(".abilities").innerText = "Abilities: " + pokemonAbilitiesToDisplay;
-
-        //Gather moves
         var pokeMoves = pokeData.moves;
-        var pokemonMovesToDisplay = [];
+        //Gather moves
         for (var m = 0; m < pokeMoves.length; m++) {
             pokemonMovesToDisplay.push(" "+pokeMoves[m].move.name);
         }
-        document.querySelector(".moves").innerText = "Moves: " + pokemonMovesToDisplay;
+        //console.log(pokemonMovesToDisplay);
+
+        card_area.innerHTML = createCard(pokeData) + card_area.innerHTML; 
+
     }
 }
 
-// function validateInput() {
-    
-// }
+//Generate Pokemon card with basic info on Pokemon captured
+function createCard(data) {
+    var res = `<div class="col pt-5">
+                    <div class="cards d-flex justify-content-center">
+                        <div class="card col col-7">
+                            <img src="${data.sprites.front_shiny}" class="card-img-top" alt="Pokemon Image">
+                            <div class="card-body bg-dark text-light">
+                                <h5 class="card-title text-uppercase">${data.name}</h5>
+                                <h6 class="card-subtitle mb-2 text-muted ">Weight: ${data.weight} lbs.</h6>
+                                <p class="card-text abilities">Abilities: ${pokemonAbilitiesToDisplay}</p>
+                                <p class="card-text moves">Moves: ${pokemonMovesToDisplay}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
+            `
+    return res;
+    }
 
-
-// function over(element) {
-//     document.querySelector(element).src = pokeData.sprites.front_shiny;
-// }
-
-// function out(element) {
-//     document.querySelector(element).src = pokeData.sprites.back_shiny;
-
-// }
+// document.querySelector(".card-img-top").src = pokeData.sprites.front_shiny;
+// document.querySelector(".card-title").innerText = pokeData.name;
+// document.querySelector(".card-subtitle").innerText = "Weight: " + pokeData.weight + "lbs.";
